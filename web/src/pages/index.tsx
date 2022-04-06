@@ -7,6 +7,7 @@ export default function Home() {
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = getSession(req, res);
+
   if (!session) {
     return {
       redirect: {
@@ -16,7 +17,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
   } else {
     return {
-      redirect,
+      redirect: {
+        destination: '/app',
+        permanent: false,
+      },
     };
   }
 };
