@@ -8,5 +8,39 @@ datasource db {
 }
 
 model Custumer {
-  id String @id @default(uuid())
+  id         String   @id @default(uuid())
+  authUserId String?  @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  purchase Purchase[]
+}
+
+model Product {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  purchasedOn Purchase[]
+}
+
+enum PurchaseStatus {
+  PENDING
+  APROVED
+  FAILED
+}
+
+model Purchase {
+  id         String         @id @default(uuid())
+  custumerId String
+  productId  String
+  status     PurchaseStatus @default(PENDING)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @default(now()) @updatedAt
+
+
+  custumer Custumer @relation(fields: [custumerId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
 }

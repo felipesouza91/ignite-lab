@@ -1,4 +1,8 @@
-import { getSession, useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import {
+  useUser,
+  withPageAuthRequired,
+  getAccessToken,
+} from '@auth0/nextjs-auth0';
 import { GetServerSideProps } from 'next';
 
 const Home: React.FC = () => {
