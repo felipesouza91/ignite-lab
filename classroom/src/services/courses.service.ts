@@ -3,6 +3,7 @@ import { PrismaService } from 'src/database/prisma/prisma.service';
 import slugify from 'slugify';
 interface CreateCourseParams {
   title: string;
+  slug?: string;
 }
 
 @Injectable()
@@ -21,13 +22,19 @@ export class CourseService {
     });
   }
 
-  async createCourse({ title }: CreateCourseParams) {
-    const slug = slugify(title, { lower: true });
-    const existCourse = await this.prisma.course.findUnique({
+  async findBySlug(slug: string) {
+    return await this.prisma.course.findUnique({
       where: {
         slug,
       },
     });
+  }
+
+  async createCourse({
+    title,
+    slug = slugify(title, { lower: true }),
+  }: CreateCourseParams) {
+    const existCourse = await this.findBySlug(slug);
     if (existCourse) {
       throw new Error('Course alread exists');
     }
